@@ -2,8 +2,9 @@
 jmp set_up
 
 %include "util.asm"
-
 %include "str16.asm"
+%include "disk.asm"
+%include "log16.asm"
 
 set_up:
     ; Stack set up.
@@ -11,25 +12,17 @@ set_up:
     mov sp, bp
 
 main:
-    push 0xAAAA
-    push 0xBBBB
-    push 0xCCCC
+    mov dh, 5
+    mov dl, 0
 
-    mov di, sp
-    mov cx, 2
-    call log_cell_16_range
+    mov bx, 0xa000
+    mov es, bx
 
-    ; call print_imm_hex_16
+    mov bx, 0x0000
+
+    call disk_load
 
     jmp $   ; Loop forever!
-    
-    
-source:
-    dw 0x0000
-
-dest:
-    db 0, 0, 0, 0, 0, 1, 1
-
 
 
 XXX__PADDING__XXX:
