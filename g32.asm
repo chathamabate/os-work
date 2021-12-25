@@ -2,7 +2,7 @@
 [bits 32]
 
 VIDEO_MEMORY equ 0xb8000
-WHITE_ON_BLACK equ 0x0F
+WHITE_ON_BLACK equ 0x0A
 
 ; print_string_32:
 ;   Print a string when the cpu is in 32 bit real mode.
@@ -34,6 +34,6 @@ XXX_print_string_32_end:
     pop ax
     pop esi
     pop edi
-    
+
     ret
 
