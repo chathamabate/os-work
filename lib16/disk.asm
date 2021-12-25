@@ -23,28 +23,50 @@ disk_load:
 
     pop dx
 
+    ; I am doubtful this error detection code actually works.
     jc XXX_disk_load_error
-
-    cmp dh, al
-    jg XXX_disk_load_inconsistent
 
     jmp XXX_disk_load_end
 
 XXX_disk_load_error:
+    mov ch, 0x00
+    mov cl, ah
+    call print_hex_16
+
     mov si, DDD_disk_load_error
     call print_string
+
     jmp XXX_disk_load_end
 
 DDD_disk_load_error:
-    db "Error Reading Disk!", NEW_LINE, 0
+    db ": Disk load error!", NEW_LINE, 0
+    
+; XXX_disk_load_error_return:
+;     cmp dh, al
+;     jg XXX_disk_load_inconsistent
 
-XXX_disk_load_inconsistent:
-    mov si, DDD_disk_load_inconsistent
-    call print_string
-    jmp XXX_disk_load_end
+;     jmp XXX_disk_load_end
 
-DDD_disk_load_inconsistent:
-    db "Did Not Copy All Sectors!", NEW_LINE, 0
+; XXX_disk_load_error:
+;     mov si, DDD_disk_load_error
+;     call print_string
+;     jmp XXX_disk_load_error_return
+
+; DDD_disk_load_error:
+;     db "Error Reading Disk!", NEW_LINE, 0
+
+; XXX_disk_load_inconsistent:
+;     mov si, DDD_disk_load_inconsistent
+;     call print_string
+
+;     ; mov cl, al
+;     ; mov ch, 0x00
+;     ; call print_dec_16
+
+;     jmp XXX_disk_load_end
+
+; DDD_disk_load_inconsistent:
+;     db "Did Not Copy All Sectors!", NEW_LINE, 0
 
 XXX_disk_load_end:
     ; Restore here (Best we can)

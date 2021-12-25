@@ -22,6 +22,18 @@ start_up_rm:
 
     mov si, DDD_start_up_rm_message
     call print_string    
+
+    ; Load test :
+    ; things seem to work despite error flag.
+    ; mov bx, 0xA000
+    ; mov dh, 6
+    ; mov dl, [BOOT_DRIVE]
+    ; call disk_load
+
+    ; mov cx, [0xA000 + (512 * 5)]
+    ; call print_hex_16
+
+    ; jmp $
     
     jmp load_kernel
 
@@ -33,7 +45,8 @@ load_kernel:
     call print_string
 
     mov bx, KERNEL_OFFSET
-    mov dh, 15
+    mov dh, 15              ; Load 15 sectors.
+                            ; The first sector is already loaded.
     mov dl, [BOOT_DRIVE]
 
     ; Load our kernel.
@@ -88,7 +101,6 @@ main_pm:
 DDD_main_pm_message:
     db "Entering kernel..."
 
-
 %include "gdt.asm"
 %include "g32.asm"
 
@@ -96,4 +108,3 @@ XXX__PADDING__XXX:
     ; Padding and magic BIOS number.
     times 510-($-$$) db 0 
     dw 0xaa55
-
