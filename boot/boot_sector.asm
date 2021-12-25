@@ -12,6 +12,7 @@ BOOT_DRIVE:
 %include "./lib16/str16.asm"
 %include "./lib16/disk.asm"
 
+
 start_up_rm:
     ; Store the boot drive.
     mov [BOOT_DRIVE], dl

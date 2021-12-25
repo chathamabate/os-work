@@ -58,6 +58,7 @@ XXX_log_cell_16_range_loop:
     jnz XXX_log_cell_16_range_loop
 
 XXX_log_cell_16_range_end:
+    ; Restore.
     pop cx
     pop di
     
