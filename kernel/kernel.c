@@ -1,15 +1,9 @@
 
 
-void bleh() {
-    int a = 10;
-}
+#include "../drivers/display.h"
 
 void main() {
-    char *video_memory = (char *)0xb8000;
-
-    int i;
-    for (i = 0; i < 5; i++) {
-        video_memory[i * 2] = 'A';
-        video_memory[(i * 2) + 1] = 0x1E;
-    }
+    clear_screen(0x0F);
+    display_string(0, 0, 0x0F, "OS Has Started!");
+    display_string(1, 0, 0x03, "Welcome!");
 }

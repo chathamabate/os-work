@@ -92,15 +92,15 @@ init_pm:
     mov esp, ebp
 
 main_pm:
-    mov esi, DDD_main_pm_message
-    call print_string_32
+    ; mov esi, DDD_main_pm_message
+    ; call print_string_32
 
     call KERNEL_OFFSET
 
     jmp $   ; Loop forever!
 
-DDD_main_pm_message:
-    db "Entering kernel..."
+; DDD_main_pm_message:
+;     db "Entering kernel..."
 
 %include "gdt.asm"
 %include "g32.asm"

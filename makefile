@@ -25,6 +25,10 @@ kernel/entry.o: kernel/entry.asm
 %.o: %.c ${HEADERS}
 	i386-elf-gcc  -ffreestanding -c $< -o $@
 
+clean:
+	rm ./*/*.o *.bin ./*/*.bin os-image
+
+
 
 # First Attempt
 # os-image: boot_sector.bin kernel.bin
