@@ -114,6 +114,69 @@ lba_to_chs:
 
     ret 
 
+;; Copied directly from github...
+;; Read sectors from the disk into memory.
+;; Params:
+;;  - ax : LBA Address.
+;;  - cl : number of sectors to read (up to 128)
+;;  - dl : drive number
+;;  - es:bx : memory address to store data.
+disk_read:
+
+    push ax                             ; save registers we will modify
+    push bx
+    push cx
+    push dx
+    push di
+
+    push cx                             ; temporarily save CL (number of sectors to read)
+    call lba_to_chs                     ; compute CHS
+    pop ax                              ; AL = number of sectors to read
+    
+    mov ah, 0x02
+    mov di, 3                           ; retry count
+
+.retry:
+    pusha                               ; save all registers, we don't know what bios modifies
+    stc                                 ; set carry flag, some BIOS'es don't set it
+    int 0x13                            ; carry flag cleared = success
+    jnc .done                           ; jump if carry not set
+
+    ; read failed
+    popa
+    call disk_reset
+
+    dec di
+    test di, di
+    jnz .retry
+
+.fail:
+    ; all attempts are exhausted
+    jmp floppy_error
+
+.done:
+    popa
+
+    pop di
+    pop dx
+    pop cx
+    pop bx
+    pop ax                             ; restore registers modified
+    ret
+
+;;
+;; Resets disk controller
+;; Parameters:
+;;   dl: drive number
+;;
+disk_reset:
+    pusha
+    mov ah, 0
+    stc
+    int 0x13
+    jc floppy_error
+    popa
+    ret
     
 main:
     mov ax, 0
@@ -131,8 +194,6 @@ main:
 
 .halt:
     jmp .halt
-
-
 
 hello_msg: db "Hello World!", ENDL, 0
 
